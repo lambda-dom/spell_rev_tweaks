@@ -8,7 +8,7 @@ AUTO_EVAL_STRINGS
 //Preamble.
 ALWAYS
     //Set library dir.
-    OUTER_TEXT_SPRINT library_dir "weidu_library/lib"
+    OUTER_TEXT_SPRINT library_dir "%MOD_FOLDER%/weidu_library/lib"
 
     //Library includes.
     INCLUDE "%library_dir%/components.tpa"

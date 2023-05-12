@@ -1,0 +1,3 @@
+[submodule "spell_rev_tweaks/weidu_library"]
+	path = spell_rev_tweaks/weidu_library
+	url = https://github.com/lambda-dom/weidu_library
