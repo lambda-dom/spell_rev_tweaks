@@ -1,0 +1,37 @@
+//Libraries.
+INCLUDE "%library_dir%/spells.tpa"
+INCLUDE "%library_dir%/bits.tpa"
+
+//Action functions.
+DEFINE_ACTION_FUNCTION patch_spell_non_combat STR_VAR spell = "" BEGIN
+    //Get resource name.
+    LAF get_spell_res STR_VAR spell = "%spell%" RET resource = resource END
+
+    ACTION_IF NOT ("%resource%" STRING_EQUAL_CASE "*") BEGIN
+        //Copy resource spell.
+        COPY_EXISTING ~%resource%.spl~ ~override~
+            //Enable non-combat.
+            LPF set_bit INT_VAR
+                offset = $spell_offsets("flags") + 2
+                bit = 0
+                value = 1
+            END
+        BUT_ONLY
+    END ELSE BEGIN
+        FAIL "patch_spell_non_combat: spell '%spell%' not found in 'spell.ids'."
+    END
+END
+
+
+//Main loop.
+WITH_SCOPE BEGIN
+    ACTION_FOR_EACH spell IN 
+        "WIZARD_MINOR_SEQUENCER"
+        "WIZARD_SPELL_SEQUENCER"
+        "WIZARD_SPELL_TRIGGER"
+        "WIZARD_CONTINGENCY"
+        "WIZARD_CHAIN_CONTINGENCY"
+    BEGIN
+        LAF patch_spell_non_combat STR_VAR spell = "%spell%" END
+    END
+END

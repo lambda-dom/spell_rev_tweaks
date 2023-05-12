@@ -1,0 +1,32 @@
+BACKUP "weidu_external/backup/spell_tweaks"
+AUTHOR "lambda_dom"
+VERSION "1.0"
+
+//Flags.
+AUTO_EVAL_STRINGS
+
+//Preamble.
+ALWAYS
+    //Set library dir.
+    OUTER_TEXT_SPRINT library_dir "weidu_library/lib"
+
+    //Library includes.
+    INCLUDE "%library_dir%/components.tpa"
+END
+
+//Languages.
+LANGUAGE "English" "english" "%MOD_FOLDER%/languages/english/setup.tra"
+
+//Components.
+//Standardized summoning.
+BEGIN @1 DESIGNATED 1
+LABEL "lambda_dom-spell_tweaks-standardized_summoning"
+REQUIRE_PREDICATE (GAME_IS "bgee bg2ee eet") @50
+REQUIRE_PREDICATE (MOD_IS_INSTALLED "spell_rev.tp2" 0) @60
+LAF load_component STR_VAR component = "standardized_summoning" END
+
+//Non-combat triggers and contingencies.
+BEGIN @2 DESIGNATED 2
+LABEL "lambda_dom-spell_tweaks-non_combat_triggers_contingencies"
+REQUIRE_PREDICATE (GAME_IS "bgee bg2ee eet") @50
+LAF load_component STR_VAR component = "non_combat_triggers_contingencies" END

@@ -1,0 +1,9 @@
+//Components.
+@1 = "Standardized Summoning"
+@2 = "Non-combat Triggers and Contingencies"
+
+//Error strings.
+@50 = "Mod only for enhanced edition games."
+
+//Mods required.
+@60 = "Main component of Spell Revisions mod required."

@@ -1,0 +1,41 @@
+//Libraries.
+INCLUDE "%library_dir%/spells.tpa"
+
+
+//Patches.
+DEFINE_ACTION_FUNCTION patch_spell_duration STR_VAR spell = "" BEGIN
+    LAF get_spell_res STR_VAR spell = "%spell%" RET resource = resource END
+    ACTION_IF NOT ("%resource%" STRING_EQUAL_CASE "*") BEGIN
+        COPY_EXISTING ~%resource%.spl~ ~override~
+            //Alter duration.
+            LPF ALTER_SPELL_EFFECT INT_VAR
+                //Use Eff.
+                match_opcode = 177
+                duration = 300
+            END
+
+            //Patch description.
+            READ_STRREF $spell_offsets("descr") descr
+            INNER_PATCH_SAVE new_descr "%descr%" BEGIN
+                REPLACE_TEXTUALLY "^Duration: [1-9][0-9]* \(turn\|round\)\(s\)?" "Duration: 5 turns"
+            END
+            SAY_EVALUATED $spell_offsets("descr") "%new_descr%"
+        BUT_ONLY
+    END ELSE BEGIN
+        FAIL "patch_spell_duration: spell '%spell%' not found in 'spell.ids'"
+    END
+END
+
+
+//Main loop.
+WITH_SCOPE BEGIN
+    //Wizard monster summoning spells.
+    OUTER_FOR (i = 1; i < 9; ++i) BEGIN
+        LAF patch_spell_duration STR_VAR spell = "WIZARD_MONSTER_SUMMONING_LEVEL_%i%" END
+    END
+
+    //Cleric animal summoning spells.
+    OUTER_FOR (i = 1; i <= 7; ++i) BEGIN
+        LAF patch_spell_duration STR_VAR spell = "CLERIC_ANIMAL_SUMMONING_LEVEL_%i%" END
+    END
+END
